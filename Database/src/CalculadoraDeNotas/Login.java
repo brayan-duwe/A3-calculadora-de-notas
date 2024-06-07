@@ -26,15 +26,4 @@ public class Login {
     }
     Connection conexao = connectionFactory.obtemConexao();
 
-    public static void main(String[] args) {
-        Login loginAluno = new Login();
-        String username = "jose";
-        String password = "jose1234";
-
-        if (loginAluno.verificarCredenciais(username, password)) {
-            System.out.println("Login bem-sucedido!");
-        } else {
-            System.out.println("Nome de usuário ou senha incorretos.");
-        }
-    }
 }
