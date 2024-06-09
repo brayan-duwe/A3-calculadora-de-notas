@@ -49,6 +49,7 @@ public class InterfaceLogin {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Login - Calculadora de Notas");
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblLogin = new JLabel("Login");
