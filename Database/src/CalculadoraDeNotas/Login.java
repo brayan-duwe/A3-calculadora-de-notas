@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class Login {
 	ConnectionFactory connectionFactory = new ConnectionFactory();
-	private int alunoId;
+	private static int alunoId;
 
 	public boolean verificarCredenciais(String username, String password) {
 		try (Connection conn = connectionFactory.obtemConexao()) {
@@ -26,16 +26,17 @@ public class Login {
 	}
 		return false;
 	}
-
+	
     public int obterAlunoId(String username) {
-        int alunoId = -1;
+        int alunoId = 0;
         try (Connection conn = connectionFactory.obtemConexao()) {
             String sql = "SELECT id FROM alunos WHERE usuario = ?";
             try (PreparedStatement statement = conn.prepareStatement(sql)) {
                 statement.setString(1, username);
                 try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
+                	if (resultSet != null && resultSet.next()) {
                         alunoId = resultSet.getInt("id");
+                        AlunoIdAtual.setAlunoId(alunoId);
                     }
                 }
             }
@@ -44,6 +45,20 @@ public class Login {
         }
         return alunoId;
     }
+    
+    public class AlunoIdAtual{
+    	private static int idDoAluno;
+    	
+        public static int getAlunoId() {
+        	return idDoAluno;
+        }
+        
+        public static void setAlunoId(int id) {
+        	idDoAluno = id;
+        }
+    	
+    }
+
 
     public boolean autenticar(String username, String password) {
         if (verificarCredenciais(username, password)) {
@@ -56,7 +71,4 @@ public class Login {
         return false;
     }
 
-    public int getAlunoId() {
-        return alunoId;
-    }
 }

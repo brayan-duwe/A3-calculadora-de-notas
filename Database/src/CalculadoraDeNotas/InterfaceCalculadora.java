@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.NumberFormat;
 import java.util.Comparator;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
@@ -149,18 +150,22 @@ public class InterfaceCalculadora {
 		btnAdicionarNota.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnAdicionarNota.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AdicionarNota adicionarNota = new AdicionarNota();
 				double nota = (Double) tfNota.getValue();
 				double percentual = (Double) tfPercentual.getValue();
 				String materia = (String) selMateria.getSelectedItem();
 				String tipo = (String) selTipo.getSelectedItem();
+				AdicionarNota incluir = new AdicionarNota();
 				if (nota <= percentual) {
 					DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-					model.addRow(new Object[] { false, nota, percentual, materia, tipo });
+					model.addRow(new Object[] {false, nota, percentual, materia, tipo });
+					incluir.setNota(nota);
+					incluir.setPercentual(percentual);
+					incluir.setMateria(materia);
+					incluir.setTipo(tipo);	
+					incluir.adicionarNota();
 				} else {
 					JOptionPane.showMessageDialog(null, "O valor da nota não pode ser maior que o percentual da nota.");
 				}
-
 			}
 		});
 
@@ -216,37 +221,21 @@ public class InterfaceCalculadora {
 		JButton btnCalcularMedia = new JButton("Calcular Média");
 		btnCalcularMedia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-				int numRows = model.getRowCount();
-				double somaNotas = 0;
-				double somaPesos = 0;
-				int numSelecionados = 0;
-
-				for (int i = 0; i < numRows; i++) {
-					boolean selecionado = (boolean) model.getValueAt(i, 0);
-					if (selecionado) {
-						double nota = (double) model.getValueAt(i, 1);
-						double percentual = (double) model.getValueAt(i, 2);
-						somaNotas += nota * percentual;
-						somaPesos += percentual;
-						numSelecionados++;
-					}
+				double media = CalcularMedia.CalculoMedia(table_1);
+				NumberFormat formatter = NumberFormat.getNumberInstance();
+		        formatter.setMinimumFractionDigits(2);
+		        formatter.setMaximumFractionDigits(2);
+				
+				lblMedia.setText("MÉDIA: " + formatter.format(media));
+				if(media >= 70) {
+					lblMedia.setForeground(new Color(0, 128, 0));
 				}
-				if (numSelecionados > 0) {
-					double media = somaNotas / somaPesos;
-					lblMedia.setText("MÉDIA: " + media);
-					if(media >= 70) {
-						lblMedia.setForeground(new Color(0, 128, 0));
-					}
-					else if(media <= 40) {
-						lblMedia.setForeground(new Color(255, 0, 0));
-						
-					}
-					else {
-						lblMedia.setForeground(new Color(255, 128, 0));
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Nenhuma nota selecionada.");
+				else if(media < 50) {
+					lblMedia.setForeground(new Color(255, 0, 0));
+					
+				}
+				else {
+					lblMedia.setForeground(new Color(255, 128, 0));
 				}
 			}
 
@@ -258,7 +247,10 @@ public class InterfaceCalculadora {
 		JButton btnApagar = new JButton("Apagar notas");
 		btnApagar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
+			    DeletarNota deletar = new DeletarNota();
+			    deletar.deletarNota((DefaultTableModel) table_1.getModel());
+			  
+			    }
 		});
 		btnApagar.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnApagar.setBounds(660, 455, 160, 30);

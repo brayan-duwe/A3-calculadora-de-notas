@@ -3,7 +3,6 @@ package CalculadoraDeNotas;
 import java.text.NumberFormat;
 import javax.swing.*;
 import javax.swing.text.*;
-import java.text.*;
 
 public class FormatacaoNumeros {
 	public static void formatarNumeros(JFormattedTextField textField) {

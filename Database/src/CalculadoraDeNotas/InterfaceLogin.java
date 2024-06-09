@@ -90,6 +90,7 @@ public class InterfaceLogin {
 				String username = tfUsuario.getText();
 				String password = new String(tfSenha.getPassword());
 		        if (login.verificarCredenciais(username, password)) {
+		        	login.obterAlunoId(username);
 		        	lblStatus.setForeground(new Color(0, 128, 0));
 		        	lblStatus.setText("Login bem-sucedido!");
 		        	frame.setVisible(false);
