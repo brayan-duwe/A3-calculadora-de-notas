@@ -96,6 +96,7 @@ public class InterfaceLogin {
 		        	frame.setVisible(false);
 		        	InterfaceCalculadora interfaceCalculadora = new InterfaceCalculadora();
 		        	interfaceCalculadora.frame.setVisible(true);
+		        	interfaceCalculadora.importarNotas(username);
 		        } else {
 		    		lblStatus.setForeground(new Color(255, 0, 0));
 		        	lblStatus.setText("Usuário ou senha incorretos");

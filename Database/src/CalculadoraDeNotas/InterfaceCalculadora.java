@@ -16,12 +16,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.Comparator;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
+
+import CalculadoraDeNotas.Login.AlunoIdAtual;
+
 import javax.swing.JCheckBox;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -70,6 +74,9 @@ public class InterfaceCalculadora {
 		frame.setTitle("Calculadora de Notas");
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
+		
+
+		
 
 		JPanel painelCadastro = new JPanel();
 		painelCadastro.setBounds(10, 24, 864, 135);
@@ -145,6 +152,8 @@ public class InterfaceCalculadora {
 		table_1.setDefaultRenderer(Object.class, centerRenderer);
 
 		scrollPane.setViewportView(table_1);
+		
+
 
 		JButton btnAdicionarNota = new JButton("Adicionar nota");
 		btnAdicionarNota.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -255,6 +264,21 @@ public class InterfaceCalculadora {
 		btnApagar.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnApagar.setBounds(660, 455, 160, 30);
 		frame.getContentPane().add(btnApagar);
-
+		
 	}
+	public void importarNotas(String username) {
+		ImportarNotas importar = new ImportarNotas();
+		Login usuarioAtual = new Login();
+		int alunoId = AlunoIdAtual.getAlunoId();
+		usuarioAtual.obterAlunoId(username);
+        List<Object[]> dados = importar.carregarDados(alunoId);
+
+		DefaultTableModel model = (DefaultTableModel) table_1.getModel();
+
+        for (Object[] linha : dados) {
+            model.addRow(linha);
+		}
 }
+}
+
+	

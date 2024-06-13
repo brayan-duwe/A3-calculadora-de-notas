@@ -27,7 +27,9 @@ public class DeletarNota {
 						stmt.setInt(1, id);
 						stmt.executeUpdate();
 					}
+					JOptionPane.showMessageDialog(null, "Deu certo ");
 					model.removeRow(i);
+
 				}
 			}
 			conn.commit();
