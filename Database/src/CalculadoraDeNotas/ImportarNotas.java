@@ -1,17 +1,13 @@
 package CalculadoraDeNotas;
 
-import CalculadoraDeNotas.Login.AlunoIdAtual;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 public class ImportarNotas {
 
@@ -26,7 +22,6 @@ public class ImportarNotas {
 				stmt.setInt(1, alunoId);
 				try (ResultSet rs = stmt.executeQuery()) {
 					while (rs.next()) {
-						boolean selecionado;
 						double nota = rs.getDouble("nota");
 						double percentual = rs.getDouble("percentual");
 						String materia = rs.getString("materia");

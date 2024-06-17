@@ -39,6 +39,7 @@ public class InterfaceCalculadora {
 	JFrame frame;
 	private JTable table_1;
 	private JTextField lblMedia;
+	private int alunoIdLogado;
 
 	/**
 	 * Launch the application.
@@ -74,9 +75,7 @@ public class InterfaceCalculadora {
 		frame.setTitle("Calculadora de Notas");
 		frame.getContentPane().setLayout(null);
 		frame.setVisible(true);
-		
-
-		
+		alunoIdLogado = 1;
 
 		JPanel painelCadastro = new JPanel();
 		painelCadastro.setBounds(10, 24, 864, 135);
@@ -152,8 +151,6 @@ public class InterfaceCalculadora {
 		table_1.setDefaultRenderer(Object.class, centerRenderer);
 
 		scrollPane.setViewportView(table_1);
-		
-
 
 		JButton btnAdicionarNota = new JButton("Adicionar nota");
 		btnAdicionarNota.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -166,11 +163,11 @@ public class InterfaceCalculadora {
 				AdicionarNota incluir = new AdicionarNota();
 				if (nota <= percentual) {
 					DefaultTableModel model = (DefaultTableModel) table_1.getModel();
-					model.addRow(new Object[] {false, nota, percentual, materia, tipo });
+					model.addRow(new Object[] { false, nota, percentual, materia, tipo });
 					incluir.setNota(nota);
 					incluir.setPercentual(percentual);
 					incluir.setMateria(materia);
-					incluir.setTipo(tipo);	
+					incluir.setTipo(tipo);
 					incluir.adicionarNota();
 				} else {
 					JOptionPane.showMessageDialog(null, "O valor da nota não pode ser maior que o percentual da nota.");
@@ -232,18 +229,16 @@ public class InterfaceCalculadora {
 			public void actionPerformed(ActionEvent e) {
 				double media = CalcularMedia.CalculoMedia(table_1);
 				NumberFormat formatter = NumberFormat.getNumberInstance();
-		        formatter.setMinimumFractionDigits(2);
-		        formatter.setMaximumFractionDigits(2);
-				
+				formatter.setMinimumFractionDigits(2);
+				formatter.setMaximumFractionDigits(2);
+
 				lblMedia.setText("MÉDIA: " + formatter.format(media));
-				if(media >= 70) {
+				if (media >= 70) {
 					lblMedia.setForeground(new Color(0, 128, 0));
-				}
-				else if(media < 50) {
+				} else if (media < 50) {
 					lblMedia.setForeground(new Color(255, 0, 0));
-					
-				}
-				else {
+
+				} else {
 					lblMedia.setForeground(new Color(255, 128, 0));
 				}
 			}
@@ -256,29 +251,37 @@ public class InterfaceCalculadora {
 		JButton btnApagar = new JButton("Apagar notas");
 		btnApagar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    DeletarNota deletar = new DeletarNota();
-			    deletar.deletarNota((DefaultTableModel) table_1.getModel());
-			  
+				JTable tabelaNotas = table_1;
+				DefaultTableModel model = (DefaultTableModel) tabelaNotas.getModel();
+			    int linhasSelecionadas = tabelaNotas.getSelectedRowCount();
+
+			    if (linhasSelecionadas == 0) {
+			        JOptionPane.showMessageDialog(null, "Nenhuma nota selecionada.");
+			        return;
 			    }
+
+			    DeletarNota deletarNota = new DeletarNota(); 
+			    deletarNota.deletarNota(model);
+			}
 		});
 		btnApagar.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnApagar.setBounds(660, 455, 160, 30);
 		frame.getContentPane().add(btnApagar);
-		
+
 	}
+
 	public void importarNotas(String username) {
 		ImportarNotas importar = new ImportarNotas();
 		Login usuarioAtual = new Login();
 		int alunoId = AlunoIdAtual.getAlunoId();
 		usuarioAtual.obterAlunoId(username);
-        List<Object[]> dados = importar.carregarDados(alunoId);
+		List<Object[]> dados = importar.carregarDados(alunoId);
 
 		DefaultTableModel model = (DefaultTableModel) table_1.getModel();
 
-        for (Object[] linha : dados) {
-            model.addRow(linha);
+		for (Object[] linha : dados) {
+			model.addRow(linha);
 		}
-}
-}
+	}
 
-	
+}
